@@ -1,12 +1,24 @@
 <script setup lang="ts">
-const { footer } = useAppConfig()
+const { footer } = useAppConfig();
 </script>
 
 <template>
+  <div
+    class="relative w-full before:border border-x-0 before:absolute before:inset-0 before:border-(--line-b-color-dark)"
+  >
+    <div
+      class="max-w-6xl h-10 lg:h-20 mx-auto px-2 py-2 flex justify-between border border-(--line-b-color-dark)"
+    ></div>
+  </div>
   <UFooter
     class="z-10 bg-default"
-    :ui="{ left: 'text-muted text-xs' }"
+    :ui="{
+      container:
+        'border-x border-(--line-b-color-dark) relative overflow-hidden lg:overflow-visible font-mono',
+      left: 'text-muted text-xs',
+    }"
   >
+    <DotElement />
     <template #left>
       {{ footer.credits }}
     </template>

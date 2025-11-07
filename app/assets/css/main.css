@@ -4,15 +4,31 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
-  --font-serif: 'Instrument Serif', serif;
+  --font-sans: "Bai Jamjuree", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-persian-green-50: #f1fcf9;
+  --color-persian-green-100: #cff8ed;
+  --color-persian-green-200: #9ff0db;
+  --color-persian-green-300: #67e1c7;
+  --color-persian-green-400: #43ccb3;
+  --color-persian-green-500: #1fad96;
+  --color-persian-green-600: #168b7a;
+  --color-persian-green-700: #166f63;
+  --color-persian-green-800: #165951;
+  --color-persian-green-900: #174a44;
+  --color-persian-green-950: #072c29;
 }
 
 :root {
-  --ui-container: var(--container-4xl);
+  --ui-radius: 0rem;
+  --ui-container: var(--container-6xl);
+  --line-b-color: var(--color-persian-green-900);
+  --line-b-color-dark: var(--color-zinc-800);
+  --cross-color: var(--color-persian-green-900);
 
   ::selection {
-    color: #282a30;
+    color: #133b36;
     background-color: #c8c8c8;
   }
 }
@@ -22,4 +38,16 @@
     color: #ffffff;
     background-color: #474747;
   }
+}
+.gradient-overlay {
+  background: radial-gradient(50% 50% at 50% 50%, #ffffff0f, #00000000 85%);
+  width: 100%;
+  height: 580px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+}
+.center-x {
+  left: 50%;
+  transform: translateX(-50%);
 }

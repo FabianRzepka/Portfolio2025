@@ -1,12 +1,11 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>
-    <UContainer class="sm:border-x border-default pt-10">
+    <div class="w-full max-w-full mx-auto sm:border-x border-default">
       <AppHeader :links="navLinks" />
       <slot />
       <AppFooter />
-    </UContainer>
+    </div>
   </div>
 </template>

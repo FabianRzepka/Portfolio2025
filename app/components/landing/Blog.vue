@@ -1,61 +1,61 @@
 <script setup lang="ts">
-import type { IndexCollectionItem } from '@nuxt/content'
+const img = useImage();
+import type { IndexCollectionItem } from "@nuxt/content";
 
 defineProps<{
-  page: IndexCollectionItem
-}>()
+  page: IndexCollectionItem;
+}>();
 
-const { data: posts } = await useAsyncData('index-blogs', () =>
-  queryCollection('blog').order('date', 'DESC').limit(3).all()
-)
+const { data: posts } = await useAsyncData("index-blogs", () =>
+  queryCollection("projects").order("date", "DESC").limit(3).all(),
+);
 if (!posts.value) {
-  throw createError({ statusCode: 404, statusMessage: 'blogs posts not found', fatal: true })
+  throw createError({
+    statusCode: 404,
+    statusMessage: "posts not found",
+    fatal: true,
+  });
 }
 </script>
 
 <template>
-  <UPageSection
-    :title="page.blog.title"
-    :description="page.blog.description"
-    :ui="{
-      container: 'px-0 !pt-0 sm:gap-6 lg:gap-8',
-      title: 'text-left text-xl sm:text-xl lg:text-2xl font-medium',
-      description: 'text-left mt-2 text-sm sm:text-md lg:text-sm text-muted'
-    }"
-  >
-    <UBlogPosts
-      orientation="vertical"
-      class="gap-4 lg:gap-y-4"
+  <div class="relative pb-14 pt-14">
+    <h2
+      class="text-pretty tracking-tight text-highlighted text-center text-xl sm:text-xl lg:text-2xl font-medium"
     >
-      <UBlogPost
-        v-for="(post, index) in posts"
-        :key="index"
-        orientation="horizontal"
-        variant="naked"
-        v-bind="post"
-        :to="post.path"
-        :ui="{
-          root: 'group relative lg:items-start lg:flex ring-0 hover:ring-0',
-          body: '!px-0',
-          header: 'hidden'
-        }"
-      >
-        <template #footer>
-          <UButton
-            size="xs"
-            variant="link"
-            class="px-0 gap-0"
-            label="Read Article"
-          >
-            <template #trailing>
-              <UIcon
-                name="i-lucide-arrow-right"
-                class="size-4 text-primary transition-all opacity-0 group-hover:translate-x-1 group-hover:opacity-100"
-              />
-            </template>
-          </UButton>
-        </template>
-      </UBlogPost>
-    </UBlogPosts>
-  </UPageSection>
+      {{ page.blog.title }}
+    </h2>
+    <div
+      class="text-balance text-center mt-2 text-sm sm:text-md lg:text-sm text-muted"
+    >
+      {{ page.blog.description }}
+    </div>
+  </div>
+
+  <UBlogPosts
+    orientation="vertical"
+    class="gap-4 grid lg:grid-cols-3 lg:gap-y-4 px-4 lg:px-0 border-t border-(--line-b-color-dark)"
+  >
+    <UBlogPost
+      v-for="(post, index) in posts"
+      class="lg:not-last:border-r border-r card lg:not-first:border-l border-l border-t lg:border-t-0 border-b lg:border-b-0 border-(--line-b-color-dark) group/item"
+      :key="index"
+      orientation="vertical"
+      variant="naked"
+      v-bind="post"
+      :ui="{
+        image: 'p-1 group-hover/blog-post:scale-150',
+      }"
+      :to="post.path"
+    >
+      <template #badge>
+        <CrossElement />
+      </template>
+    </UBlogPost>
+  </UBlogPosts>
 </template>
+<style>
+.card img {
+  transform-origin: 6% 2% !important;
+}
+</style>

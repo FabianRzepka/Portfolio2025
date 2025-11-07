@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { IndexCollectionItem } from '@nuxt/content'
+import type { IndexCollectionItem } from "@nuxt/content";
 
 defineProps<{
-  page: IndexCollectionItem
-}>()
+  page: IndexCollectionItem;
+}>();
 </script>
 
 <template>
@@ -12,9 +12,14 @@ defineProps<{
     :ui="{
       container: '!p-0 gap-4 sm:gap-4',
       title: 'text-left text-xl sm:text-xl lg:text-2xl font-medium',
-      description: 'mt-2'
+      description: 'mt-2',
     }"
   >
+    <div
+      class="absolute select-none inset-0 max-w-4xl mx-auto font-normal font-[none] text-5xl text-persian-green-100 pointer-events-none"
+    >
+      <CrossElement />
+    </div>
     <template #description>
       <div class="flex flex-col gap-2">
         <Motion
@@ -24,12 +29,12 @@ defineProps<{
           :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
           :transition="{ delay: 0.4 + 0.2 * index }"
           :in-view-options="{ once: true }"
-          class="text-muted flex items-center text-nowrap gap-2"
+          class="text-muted flex flex-col text-nowrap gap-2"
         >
-          <p class="text-sm">
+          <p class="text-sm text-white text-left">
             {{ experience.date }}
           </p>
-          <USeparator />
+
           <ULink
             class="flex items-center gap-1"
             :to="experience.company.url"
@@ -52,6 +57,4 @@ defineProps<{
   </UPageSection>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

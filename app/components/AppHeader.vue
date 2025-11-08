@@ -1,32 +1,30 @@
-<script setup lang="ts">
-import type { NavigationMenuItem } from "@nuxt/ui";
+<script lang="ts" setup>
+import type { NavigationMenuItem } from '@nuxt/ui'
 
 defineProps<{
-  links: NavigationMenuItem[];
-}>();
+  links: NavigationMenuItem[]
+}>()
 </script>
 
 <template>
-  <div
-    class="fixed top-2 sm:top-4 mx-auto left-1/2 transform -translate-x-1/2 z-10 group/item"
-  >
+  <div class="group/item fixed top-2 left-1/2 z-10 mx-auto -translate-x-1/2 transform sm:top-4">
     <div
-      class="*:z-10 *:size-2 *:absolute *:border-persian-green-200 *:group-hover/item:scale-130 *:transition-all *:duration-300 *:ease-in-out"
+      class="*:border-persian-green-200 *:absolute *:z-10 *:size-2 *:transition-all *:duration-300 *:ease-in-out *:group-hover/item:scale-130"
     >
-      <div class="border-t border-l left-0 top-0"></div>
-      <div class="border-t border-r right-0 top-0"></div>
-      <div class="border-b border-l left-0 bottom-0"></div>
-      <div class="border-b border-r right-0 bottom-0"></div>
+      <div class="top-0 left-0 border-t border-l"></div>
+      <div class="top-0 right-0 border-t border-r"></div>
+      <div class="bottom-0 left-0 border-b border-l"></div>
+      <div class="right-0 bottom-0 border-r border-b"></div>
     </div>
 
     <UNavigationMenu
       :items="links"
-      variant="link"
-      color="neutral"
-      class="header-nav font-mono backdrop-filter backdrop-blur-[10px] lg:min-w-2xl w-full px-2 sm:px-4 border border-muted/50 shadow-lg shadow-neutral-950/5"
       :ui="{
         link: 'px-2 py-1',
       }"
+      color="neutral"
+      variant="link"
+      class="header-nav border-muted/50 w-full border px-2 font-mono shadow-lg shadow-neutral-950/5 backdrop-blur-[10px] backdrop-filter sm:px-4 lg:min-w-2xl"
     >
       <template #list-trailing>
         <UContentSearchButton />

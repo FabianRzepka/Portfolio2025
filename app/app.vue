@@ -1,51 +1,49 @@
-<script setup lang="ts">
-import * as nuxtUiLocales from "@nuxt/ui/locale";
-const colorMode = useColorMode();
+<script lang="ts" setup>
+import * as nuxtUiLocales from '@nuxt/ui/locale'
+const colorMode = useColorMode()
 
-const color = computed(() =>
-  colorMode.value === "dark" ? "#020618" : "white",
-);
+const color = computed(() => (colorMode.value === 'dark' ? '#020618' : 'white'))
 
 useHead({
   meta: [
-    { charset: "utf-8" },
-    { name: "viewport", content: "width=device-width, initial-scale=1" },
-    { key: "theme-color", name: "theme-color", content: color },
+    { charset: 'utf-8' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { key: 'theme-color', name: 'theme-color', content: color },
   ],
-  link: [{ rel: "icon", href: "/favicon.ico" }],
+  link: [{ rel: 'icon', href: '/favicon.ico' }],
   htmlAttrs: {
-    lang: "pl",
+    lang: 'pl',
   },
-});
+})
 
 useSeoMeta({
-  titleTemplate: "%s - Portfolio",
-  ogImage: "https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png",
-  twitterImage: "https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png",
-  twitterCard: "summary_large_image",
-});
+  titleTemplate: '%s - Portfolio',
+  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png',
+  twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png',
+  twitterCard: 'summary_large_image',
+})
 
 const [{ data: navigation }, { data: files }] = await Promise.all([
   useAsyncData(
-    "navigation",
+    'navigation',
     () => {
-      return Promise.all([queryCollectionNavigation("projects")]);
+      return Promise.all([queryCollectionNavigation('projects')])
     },
     {
       transform: (data) => data.flat(),
     },
   ),
   useLazyAsyncData(
-    "search",
+    'search',
     () => {
-      return Promise.all([queryCollectionSearchSections("projects")]);
+      return Promise.all([queryCollectionSearchSections('projects')])
     },
     {
       server: false,
       transform: (data) => data.flat(),
     },
   ),
-]);
+])
 </script>
 
 <template>
@@ -57,12 +55,12 @@ const [{ data: navigation }, { data: files }] = await Promise.all([
     </NuxtLayout>
     <ClientOnly>
       <LazyUContentSearch
+        :colorMode="false"
         :files="files"
+        :fuse="{ resultLimit: 42 }"
+        :links="navLinks"
         :navigation="navigation"
         shortcut="meta_k"
-        :colorMode="false"
-        :links="navLinks"
-        :fuse="{ resultLimit: 42 }"
       />
     </ClientOnly>
   </UApp>

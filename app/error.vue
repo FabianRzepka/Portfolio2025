@@ -1,45 +1,45 @@
-<script setup lang="ts">
-import type { NuxtError } from "#app";
+<script lang="ts" setup>
+import type { NuxtError } from '#app'
 
 defineProps({
   error: {
     type: Object as PropType<NuxtError>,
     required: true,
   },
-});
+})
 
 useHead({
   htmlAttrs: {
-    lang: "en",
+    lang: 'en',
   },
-});
+})
 
 useSeoMeta({
-  title: "Strona nie znaleziona",
-  description: "Przykro mi, ale ta strona nie mogła zostać znaleziona.",
-});
+  title: 'Strona nie znaleziona',
+  description: 'Przykro mi, ale ta strona nie mogła zostać znaleziona.',
+})
 
 const [{ data: navigation }, { data: files }] = await Promise.all([
   useAsyncData(
-    "navigation",
+    'navigation',
     () => {
-      return Promise.all([queryCollectionNavigation("projects")]);
+      return Promise.all([queryCollectionNavigation('projects')])
     },
     {
       transform: (data) => data.flat(),
     },
   ),
   useLazyAsyncData(
-    "search",
+    'search',
     () => {
-      return Promise.all([queryCollectionSearchSections("projects")]);
+      return Promise.all([queryCollectionSearchSections('projects')])
     },
     {
       server: false,
       transform: (data) => data.flat(),
     },
   ),
-]);
+])
 </script>
 
 <template>
@@ -59,10 +59,10 @@ const [{ data: navigation }, { data: files }] = await Promise.all([
     <ClientOnly>
       <LazyUContentSearch
         :files="files"
-        shortcut="meta_k"
-        :navigation="navigation"
-        :links="navLinks"
         :fuse="{ resultLimit: 42 }"
+        :links="navLinks"
+        :navigation="navigation"
+        shortcut="meta_k"
       />
     </ClientOnly>
 

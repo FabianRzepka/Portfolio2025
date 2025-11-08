@@ -1,214 +1,186 @@
-<script setup lang="ts">
-import type { ContentNavigationItem } from "@nuxt/content";
-import { mapContentNavigation } from "@nuxt/ui/utils/content";
-import { findPageBreadcrumb } from "@nuxt/content/utils";
+<script lang="ts" setup>
+import type { ContentNavigationItem } from '@nuxt/content'
+import { mapContentNavigation } from '@nuxt/ui/utils/content'
+import { findPageBreadcrumb } from '@nuxt/content/utils'
 
-const route = useRoute();
+const route = useRoute()
 
-const { data: page } = await useAsyncData(route.path, () =>
-  queryCollection("projects").path(route.path).first(),
-);
+const { data: page } = await useAsyncData(route.path, () => queryCollection('projects').path(route.path).first())
 if (!page.value)
   throw createError({
     statusCode: 404,
-    statusMessage: "Page not found",
+    statusMessage: 'Page not found',
     fatal: true,
-  });
+  })
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () =>
-  queryCollectionItemSurroundings("projects", route.path, {
-    fields: ["description"],
+  queryCollectionItemSurroundings('projects', route.path, {
+    fields: ['description'],
   }),
-);
+)
 
-const navigation = inject<Ref<ContentNavigationItem[]>>("navigation", ref([]));
-console.log(navigation.value);
-const blogNavigation = computed(
-  () =>
-    navigation.value.find((item) => item.path === "/projects")?.children || [],
-);
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation', ref([]))
+const blogNavigation = computed(() => navigation.value.find((item) => item.path === '/projects')?.children || [])
 
 const breadcrumb = computed(() =>
-  mapContentNavigation(
-    findPageBreadcrumb(blogNavigation?.value, page.value?.path),
-  ).map(({ icon, ...link }) => link),
-);
+  mapContentNavigation(findPageBreadcrumb(blogNavigation?.value, page.value?.path)).map(({ icon, ...link }) => link),
+)
 
 if (page.value.image) {
-  defineOgImage({ url: page.value.image });
+  defineOgImage({ url: page.value.image })
 } else {
   defineOgImageComponent(
-    "Project",
+    'Project',
     {
-      headline: breadcrumb.value.map((item) => item.label).join(" > "),
+      headline: breadcrumb.value.map((item) => item.label).join(' > '),
     },
     {
-      fonts: ["Geist:400", "Geist:600"],
+      fonts: ['Geist:400', 'Geist:600'],
     },
-  );
+  )
 }
 
-const title = page.value?.seo?.title || page.value?.title;
-const description = page.value?.seo?.description || page.value?.description;
+const title = page.value?.seo?.title || page.value?.title
+const description = page.value?.seo?.description || page.value?.description
 
 useSeoMeta({
   title,
   description,
   ogDescription: description,
   ogTitle: title,
-});
+})
 
-const articleLink = computed(() => `${window?.location}`);
+const articleLink = computed(() => `${window?.location}`)
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("pl-PL", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
+  return new Date(dateString).toLocaleDateString('pl-PL', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
 </script>
 
 <template>
   <div
-    class="pt-20 lg:pt-20 before:border before:pointer-events-none before:border-x-0 before:absolute before:inset-0 before:border-(--line-b-color-dark) relative"
+    class="relative pt-20 before:pointer-events-none before:absolute before:inset-0 before:border before:border-x-0 before:border-(--line-b-color-dark) lg:pt-20"
   >
     <div
-      class="absolute m-auto inset-x-4 top-0 lg:max-w-6xl border-(--line-b-color-dark) border-x pointer-events-none h-full lg-max:hidden"
+      class="lg-max:hidden pointer-events-none absolute inset-x-4 top-0 m-auto h-full border-x border-(--line-b-color-dark) lg:max-w-6xl"
     ></div>
-    <div class="border-t border-(--line-b-color-dark) z-10">
-      <div
-        class="px-4 lg:px-0 lg:max-w-6xl mx-auto flex justify-between items-center relative font-mono"
-      >
+    <div class="z-10 border-t border-(--line-b-color-dark)">
+      <div class="relative mx-auto flex items-center justify-between px-4 font-mono lg:max-w-6xl lg:px-0">
         <UButton
-          size="md"
-          icon="lucide:arrow-left"
-          variant="link"
           color="primary"
+          icon="lucide:arrow-left"
+          size="md"
           to="/projects"
-          class="cursor-pointer pr-4 border-r border-(--line-b-color-dark) h-full text-xs uppercase"
+          variant="link"
+          class="h-full cursor-pointer border-r border-(--line-b-color-dark) pr-4 text-xs uppercase"
         >
           Projekty
         </UButton>
+        <div class="flex h-full w-full"></div>
         <UButton
-          class="cursor-pointer border-l pl-4 border-(--line-b-color-dark) text-xs uppercase"
-          size="md"
-          icon="lucide:clipboard-copy"
-          variant="link"
-          color="primary"
-          label="Kopiuj link"
           @click="copyToClipboard(articleLink, 'Link projektu skopiowany')"
+          color="primary"
+          icon="lucide:clipboard-copy"
+          label="Kopiuj link"
+          size="md"
+          variant="link"
+          class="cursor-pointer border-l border-(--line-b-color-dark) pl-4 text-xs uppercase"
         />
       </div>
     </div>
   </div>
 
-  <UMain
-    class="lg:m-0 mx-4 lg:max-w-6xl lg:mx-auto border-x border-(--line-b-color-dark) min-h-screen"
-  >
-    <div
-      v-if="page"
-      class="flex relative flex-col gap-3 overflow-hidden border-b border-(--line-b-color-dark) pt-20"
-    >
+  <UMain class="mx-4 min-h-screen border-x border-(--line-b-color-dark) lg:m-0 lg:mx-auto lg:max-w-6xl">
+    <div v-if="page" class="relative flex flex-col gap-3 overflow-hidden border-b border-(--line-b-color-dark) pt-20">
       <CrossElement />
       <div class="gradient-overlay absolute -top-50 opacity-50" />
-      <h1 class="text-4xl text-center font-medium max-w-3xl mx-auto">
+      <h1 class="mx-auto max-w-3xl text-center text-4xl font-medium">
         {{ page.title }}
       </h1>
-      <p class="text-muted text-center max-w-2xl mx-auto">
+      <p class="text-muted mx-auto max-w-2xl text-center">
         {{ page.description }}
       </p>
-      <div class="flex text-xs text-muted items-center justify-center gap-2">
+      <div class="text-muted flex items-center justify-center gap-2 text-xs">
         <span v-if="page.date">
           {{ formatDate(page.date) }}
         </span>
       </div>
 
-      <div class="grid gap-4 grid-flow-col justify-center mb-10">
-        <UBadge v-for="tag in page.tags" color="primary" variant="subtle">{{
-          tag
-        }}</UBadge>
+      <div class="mb-10 grid grid-flow-col justify-center gap-4">
+        <UBadge v-for="tag in page.tags" color="primary" variant="subtle">{{ tag }}</UBadge>
       </div>
     </div>
     <NuxtImg
       v-if="page"
-      :src="page.image"
       :alt="page.title"
-      class="w-full m-auto object-fit object-center border-b border-(--line-b-color-dark)"
+      :src="page.image"
+      class="object-fit m-auto w-full border-b border-(--line-b-color-dark) object-center"
     />
     <UContainer class="relative">
       <UPage v-if="page">
-        <UPageBody class="max-w-3xl mx-auto">
+        <UPageBody class="mx-auto max-w-3xl">
           <ContentRenderer v-if="page.body" :value="page" />
         </UPageBody>
       </UPage>
     </UContainer>
   </UMain>
   <!-- Webiste preview banner -->
-  <div v-if="page?.link" class="border-t border-(--line-b-color-dark) relative">
-    <div class="max-w-6xl mx-auto relative">
+  <div v-if="page?.link" class="relative border-t border-(--line-b-color-dark)">
+    <div class="relative mx-auto max-w-6xl">
       <div class="gradient-overlay -top-50 opacity-50"></div>
       <div
-        class="flex lg:max-w-full mx-4 lg:mx-auto justify-center relative border-x border-(--line-b-color-dark) before:border before:pointer-events-none before:border-x-0 before:absolute before:inset-y-16 before:inset-x-0 before:border-(--line-b-color-dark)"
+        class="relative mx-4 flex justify-center border-x border-(--line-b-color-dark) before:pointer-events-none before:absolute before:inset-x-0 before:inset-y-16 before:border before:border-x-0 before:border-(--line-b-color-dark) lg:mx-auto lg:max-w-full"
       >
         <CrossElement is-cross />
-        <div class="absolute top-6 z-10 pointer-events-none">
+        <div class="pointer-events-none absolute top-6 z-10">
           <MonoBagde>
-            <span class="text-xs text-zinc-300 uppercase">
-              Zobacz stronę na żywo
-            </span>
+            <span class="text-xs text-zinc-300 uppercase">Zobacz stronę na żywo</span>
           </MonoBagde>
         </div>
-        <div class="py-16 border-x relative border-default">
-          <div class="p-5.5 relative">
+        <div class="border-default relative border-x py-16">
+          <div class="relative p-5.5">
             <DotElement />
             <UButton
-              class="relative cursor-pointer"
-              color="neutral"
-              size="xl"
-              variant="outline"
-              target="_blank"
               :to="page.link"
+              color="neutral"
               icon="lucide:external-link"
+              size="xl"
+              target="_blank"
+              variant="outline"
+              class="relative cursor-pointer"
             >
               <CrossElement />
-              Link do strony</UButton
-            >
+              Link do strony
+            </UButton>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div
-    class="relative w-full before:border-t before:absolute before:inset-0 before:border-(--line-b-color-dark)"
-  >
+  <div class="relative w-full before:absolute before:inset-0 before:border-t before:border-(--line-b-color-dark)">
     <div
-      class="mx-4 lg:max-w-6xl border-x border-t border-(--line-b-color-dark) h-10 lg:h-20 lg:mx-auto flex justify-center items-center pointer-events-none"
+      class="pointer-events-none mx-4 flex h-10 items-center justify-center border-x border-t border-(--line-b-color-dark) lg:mx-auto lg:h-20 lg:max-w-6xl"
     >
       <MonoBagde>
         <span class="text-xs text-zinc-300 uppercase">/ Nawigacja /</span>
       </MonoBagde>
     </div>
   </div>
-  <div
-    class="border-t border-(--line-b-color-dark) overflow-hidden lg:overflow-visible"
-  >
-    <div class="mx-4 lg:max-w-6xl relative lg:mx-auto">
+  <div class="overflow-hidden border-t border-(--line-b-color-dark) lg:overflow-visible">
+    <div class="relative mx-4 lg:mx-auto lg:max-w-6xl">
       <UContentSurround
+        :surround
         :ui="{
           root: 'gap-4 p-2 lg:p-0 lg:gap-0 border-x border-(--line-b-color-dark) ',
           link: 'lg:border-0 lg:gap-0 lg:first:border-r-1 ',
         }"
-        :surround
       />
     </div>
   </div>
-  <div
-    class="fixed left-10 top-1/2 -translate-y-1/2 z-40 xl:block hidden opacity-100 translate-x-0"
-  >
-    <UContentToc
-      highlight
-      highlight-color="neutral"
-      :links="page?.body?.toc?.links"
-    />
+  <div class="fixed top-1/2 left-10 z-40 hidden translate-x-0 -translate-y-1/2 opacity-100 xl:block">
+    <UContentToc :links="page?.body?.toc?.links" highlight highlight-color="neutral" />
   </div>
 </template>

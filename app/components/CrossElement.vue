@@ -14,7 +14,7 @@ withDefaults(
 </script>
 <template>
   <div
-    class="*:border-persian-green-200 contents *:absolute *:z-10 *:size-2 *:transition-all *:duration-300 *:ease-in-out *:group-hover/item:size-4"
+    class="*:border-persian-green-200 contents *:absolute *:z-2 *:size-2 *:transition-all *:duration-300 *:ease-in-out *:group-hover/item:size-4"
   >
     <!-- Cross corners -->
     <template v-if="isCross">

@@ -1,9 +1,9 @@
-<script setup lang="ts">
-import type { IndexCollectionItem } from "@nuxt/content";
+<script lang="ts" setup>
+import type { IndexCollectionItem } from '@nuxt/content'
 
 defineProps<{
-  page: IndexCollectionItem;
-}>();
+  page: IndexCollectionItem
+}>()
 </script>
 
 <template>
@@ -16,7 +16,7 @@ defineProps<{
     }"
   >
     <div
-      class="absolute select-none inset-0 max-w-4xl mx-auto font-normal font-[none] text-5xl text-persian-green-100 pointer-events-none"
+      class="text-persian-green-100 pointer-events-none absolute inset-0 mx-auto max-w-4xl font-[none] text-5xl font-normal select-none"
     >
       <CrossElement />
     </div>
@@ -24,29 +24,22 @@ defineProps<{
       <div class="flex flex-col gap-2">
         <Motion
           v-for="(experience, index) in page.experience.items"
-          :key="index"
-          :initial="{ opacity: 0, transform: 'translateY(20px)' }"
-          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-          :transition="{ delay: 0.4 + 0.2 * index }"
           :in-view-options="{ once: true }"
-          class="text-muted flex flex-col text-nowrap gap-2"
+          :initial="{ opacity: 0, transform: 'translateY(20px)' }"
+          :key="index"
+          :transition="{ delay: 0.2 + 0.2 * index }"
+          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+          class="text-muted flex flex-col gap-2 text-nowrap"
         >
-          <p class="text-sm text-white text-left">
+          <p class="text-left text-sm text-white">
             {{ experience.date }}
           </p>
 
-          <ULink
-            class="flex items-center gap-1"
-            :to="experience.company.url"
-            target="_blank"
-          >
+          <ULink :to="experience.company.url" target="_blank" class="flex items-center gap-1">
             <span class="text-sm">
               {{ experience.position }}
             </span>
-            <div
-              class="inline-flex items-center gap-1"
-              :style="{ color: experience.company.color }"
-            >
+            <div class="inline-flex items-center gap-1" :style="{ color: experience.company.color }">
               <span class="font-medium">{{ experience.company.name }}</span>
               <UIcon :name="experience.company.logo" />
             </div>

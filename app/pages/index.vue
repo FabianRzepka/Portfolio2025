@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { motion } from 'motion-v'
 const { data: page } = await useAsyncData('index', () => {
   return queryCollection('index').first()
 })
@@ -30,16 +31,20 @@ useSeoMeta({
       ></div>
       <LandingAbout
         :page
-        class="hover:bg-persian-green-500/5 group/item h-full border-r border-b border-l border-(--line-b-color-dark) p-4 transition-all duration-200 ease-in-out lg:border-b-0 lg:border-l-0"
+        class="hover:bg-persian-green-500/5 group/item h-full border-r border-b border-l border-(--line-b-color-dark) bg-zinc-800/20 p-4 transition-all duration-200 ease-in-out lg:border-b-0 lg:border-l-0"
       />
       <LandingWorkExperience
         :page
-        class="hover:bg-persian-green-500/5 group/item h-full border-t border-r border-l border-(--line-b-color-dark) p-4 transition-all duration-200 ease-in-out lg:border-t-0 lg:border-r-0"
+        class="hover:bg-persian-green-500/5 group/item h-full border-t border-r border-l border-(--line-b-color-dark) bg-zinc-800/20 p-4 transition-all duration-200 ease-in-out lg:border-t-0 lg:border-r-0"
       />
     </div>
     <LineSpacer />
     <div class="relative mx-auto w-full max-w-6xl border-x border-(--line-b-color-dark)">
-      <div class="gradient-overlay -top-50"></div>
+      <motion.div
+        :initial="{ opacity: 0, scale: 0.95 }"
+        :while-in-view="{ opacity: 1, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } }"
+        class="gradient-overlay absolute -top-50 opacity-50"
+      />
       <LazyLandingBlog :page />
     </div>
 

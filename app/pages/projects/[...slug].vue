@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { motion } from 'motion-v'
 import type { ContentNavigationItem } from '@nuxt/content'
 import { mapContentNavigation } from '@nuxt/ui/utils/content'
 import { findPageBreadcrumb } from '@nuxt/content/utils'
@@ -61,43 +62,38 @@ const formatDate = (dateString: string) => {
 </script>
 
 <template>
-  <div
-    class="relative pt-20 before:pointer-events-none before:absolute before:inset-0 before:border before:border-x-0 before:border-(--line-b-color-dark) lg:pt-20"
-  >
-    <div
-      class="lg-max:hidden pointer-events-none absolute inset-x-4 top-0 m-auto h-full border-x border-(--line-b-color-dark) lg:max-w-6xl"
-    ></div>
-    <div class="z-10 border-t border-(--line-b-color-dark)">
-      <div class="relative mx-auto flex items-center justify-between px-4 font-mono lg:max-w-6xl lg:px-0">
-        <UButton
-          color="primary"
-          icon="lucide:arrow-left"
-          size="md"
-          to="/projects"
-          variant="link"
-          class="h-full cursor-pointer border-r border-(--line-b-color-dark) pr-4 text-xs uppercase"
-        >
-          Projekty
-        </UButton>
-        <div class="flex h-full w-full"></div>
-        <UButton
-          @click="copyToClipboard(articleLink, 'Link projektu skopiowany')"
-          color="primary"
-          icon="lucide:clipboard-copy"
-          label="Kopiuj link"
-          size="md"
-          variant="link"
-          class="cursor-pointer border-l border-(--line-b-color-dark) pl-4 text-xs uppercase"
-        />
-      </div>
-    </div>
-  </div>
-
+  <AppHeaderSpacer>
+    <UButton
+      color="primary"
+      icon="lucide:arrow-left"
+      size="md"
+      to="/projects"
+      variant="link"
+      class="h-full cursor-pointer border-r border-(--line-b-color-dark) pr-4 text-xs uppercase"
+    >
+      Projekty
+    </UButton>
+    <div class="flex h-full w-full"></div>
+    <UButton
+      @click="copyToClipboard(articleLink, 'Link projektu skopiowany')"
+      color="primary"
+      icon="lucide:clipboard-copy"
+      label="Kopiuj link"
+      size="md"
+      variant="link"
+      class="cursor-pointer border-l border-(--line-b-color-dark) pl-4 text-xs uppercase"
+    />
+  </AppHeaderSpacer>
   <UMain class="mx-4 min-h-screen border-x border-(--line-b-color-dark) lg:m-0 lg:mx-auto lg:max-w-6xl">
     <div v-if="page" class="relative flex flex-col gap-3 overflow-hidden border-b border-(--line-b-color-dark) pt-20">
       <CrossElement />
-      <div class="gradient-overlay absolute -top-50 opacity-50" />
-      <h1 class="mx-auto max-w-3xl text-center text-4xl font-medium">
+      <motion.div
+        :initial="{ opacity: 0, scale: 0.95 }"
+        :while-in-view="{ opacity: 1, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } }"
+        class="gradient-overlay absolute -top-50 opacity-50"
+      />
+
+      <h1 class="mx-auto max-w-3xl text-center text-3xl font-medium lg:text-4xl">
         {{ page.title }}
       </h1>
       <p class="text-muted mx-auto max-w-2xl text-center">

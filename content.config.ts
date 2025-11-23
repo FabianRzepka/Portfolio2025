@@ -1,37 +1,33 @@
-import { defineCollection, defineContentConfig, z } from "@nuxt/content";
+import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 
 const createBaseSchema = () =>
   z.object({
     title: z.string(),
     description: z.string(),
-  });
+  })
 
 const createButtonSchema = () =>
   z.object({
     label: z.string(),
     icon: z.string().optional(),
     to: z.string().optional(),
-    color: z
-      .enum(["primary", "neutral", "success", "warning", "error", "info"])
-      .optional(),
-    size: z.enum(["xs", "sm", "md", "lg", "xl"]).optional(),
-    variant: z
-      .enum(["solid", "outline", "subtle", "soft", "ghost", "link"])
-      .optional(),
-    target: z.enum(["_blank", "_self"]).optional(),
-  });
+    color: z.enum(['primary', 'neutral', 'success', 'warning', 'error', 'info']).optional(),
+    size: z.enum(['xs', 'sm', 'md', 'lg', 'xl']).optional(),
+    variant: z.enum(['solid', 'outline', 'subtle', 'soft', 'ghost', 'link']).optional(),
+    target: z.enum(['_blank', '_self']).optional(),
+  })
 
 const createImageSchema = () =>
   z.object({
-    src: z.string().editor({ input: "media" }),
+    src: z.string().editor({ input: 'media' }),
     alt: z.string(),
-  });
+  })
 
 const createLogosSchema = () =>
   z.object({
     icon: z.string(),
     title: z.string(),
-  });
+  })
 
 const createAuthorSchema = () =>
   z.object({
@@ -41,19 +37,19 @@ const createAuthorSchema = () =>
     twitter: z.string().optional(),
     to: z.string().optional(),
     avatar: createImageSchema().optional(),
-  });
+  })
 
 const createTestimonialSchema = () =>
   z.object({
     quote: z.string(),
     author: createAuthorSchema(),
-  });
+  })
 
 export default defineContentConfig({
   collections: {
     index: defineCollection({
-      type: "page",
-      source: "index.yml",
+      type: 'page',
+      source: 'index.yml',
       schema: z.object({
         hero: z.object({
           links: z.array(createButtonSchema()),
@@ -68,7 +64,7 @@ export default defineContentConfig({
               company: z.object({
                 name: z.string(),
                 url: z.string(),
-                logo: z.string().editor({ input: "icon" }),
+                logo: z.string().editor({ input: 'icon' }),
                 color: z.string(),
               }),
             }),
@@ -92,21 +88,31 @@ export default defineContentConfig({
       }),
     }),
     projects: defineCollection({
-      type: "page",
-      source: "projects/*.md",
+      type: 'page',
+      source: 'projects/*.md',
       schema: z.object({
         date: z.date(),
         link: z.string(),
-        image: z.string().nonempty().editor({ input: "media" }),
+        image: z.string().nonempty().editor({ input: 'media' }),
         tags: z.array(z.string()),
       }),
     }),
+    media: defineCollection({
+      type: 'data',
+      source: 'media/*.yml',
+      schema: z.object({
+        title: z.string().nonempty(),
+        coverImage: z.string().nonempty().editor({ input: 'media' }),
+        images: z.array(z.string()),
+        date: z.date(),
+      }),
+    }),
     pages: defineCollection({
-      type: "page",
-      source: [{ include: "projects.yml" }, { include: "blog.yml" }],
+      type: 'page',
+      source: [{ include: 'projects.yml' }, { include: 'media.yml' }],
       schema: z.object({
         links: z.array(createButtonSchema()),
       }),
     }),
   },
-});
+})

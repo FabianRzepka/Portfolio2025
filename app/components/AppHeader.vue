@@ -24,7 +24,7 @@ defineProps<{
       }"
       color="neutral"
       variant="link"
-      class="header-nav border-muted/50 w-full border px-2 font-mono shadow-lg shadow-neutral-950/5 backdrop-blur-[10px] backdrop-filter sm:px-4 lg:min-w-2xl"
+      class="header-nav border-muted/50 z-11 w-full border px-2 font-mono shadow-lg shadow-neutral-950/5 backdrop-blur-[10px] backdrop-filter sm:px-4 lg:min-w-2xl"
     >
       <template #list-trailing>
         <UContentSearchButton />

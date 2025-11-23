@@ -2,6 +2,8 @@
 const { data: page } = await useAsyncData('project-page', () => {
   return queryCollection('pages').path('/projects').first()
 })
+
+console.log(page)
 if (!page.value) {
   throw createError({
     statusCode: 404,
@@ -26,54 +28,52 @@ useSeoMeta({
 </script>
 
 <template>
-  <UPage v-if="page">
-    <UPageHero
-      :description="page.description"
-      :title="page.title"
-      :ui="{
-        title: '!mx-0 text-left',
-        description: '!mx-0 text-left',
-        links: 'justify-start',
-      }"
+  <AppHeaderSpacer>
+    <UButton
+      color="primary"
+      icon="lucide:arrow-left"
+      size="md"
+      to="/"
+      variant="link"
+      class="h-full shrink-0 cursor-pointer border-r border-(--line-b-color-dark) pr-4 text-xs uppercase"
     >
-      <!-- <template #links>
-        <div v-if="page.links" class="flex items-center gap-2">
-          <UButton
-            :label="page.links[0]?.label"
-            :to="global.meetingLink"
-            v-bind="page.links[0]"
-          />
-          <UButton :to="`mailto:${global.email}`" v-bind="page.links[1]" />
-        </div>
-      </template> -->
-    </UPageHero>
-    <UPageSection
-      :ui="{
-        container: '!pt-0',
-      }"
+      Strona główna
+    </UButton>
+    <div class="flex h-full w-full"></div>
+  </AppHeaderSpacer>
+  <UMain v-if="page" class="mx-4 min-h-screen border-x border-(--line-b-color-dark) lg:m-0 lg:mx-auto lg:max-w-6xl">
+    <div
+      class="relative flex flex-col gap-2 overflow-hidden border-b border-(--line-b-color-dark) px-4 py-18 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-24 lg:text-left"
     >
-      <UBlogPosts orientation="vertical">
-        <Motion
-          v-for="(post, index) in posts"
-          :in-view-options="{ once: true }"
-          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
-          :key="index"
-          :transition="{ delay: 0.2 * index }"
-          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-        >
-          <UBlogPost
-            v-bind="post"
-            :to="post.path"
-            :ui="{
-              root: 'md:grid md:grid-cols-2 group overflow-visible transition-all duration-300',
-              image: 'group-hover/blog-post:scale-105 rounded-lg shadow-lg border-4 border-muted ring-2 ring-default',
-              header: index % 2 === 0 ? 'sm:-rotate-1 overflow-visible' : 'sm:rotate-1 overflow-visible',
-            }"
-            orientation="horizontal"
-            variant="naked"
-          />
-        </Motion>
-      </UBlogPosts>
-    </UPageSection>
-  </UPage>
+      <CrossElement />
+      <div class="gradient-overlay absolute -top-50 opacity-50" />
+      <h1 class="text-3xl font-semibold tracking-tight text-pretty lg:text-4xl">
+        {{ page.title }}
+      </h1>
+      <p class="text-muted">
+        {{ page.description }}
+      </p>
+    </div>
+    <Motion
+      v-for="(post, index) in posts"
+      :in-view-options="{ once: true }"
+      :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+      :key="index"
+      :transition="{ delay: 0.2 * index }"
+      :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+    >
+      <UBlogPost
+        v-bind="post"
+        :to="post.path"
+        :ui="{
+          root: 'md:grid md:grid-cols-2 group overflow-hiden transition-all duration-300 bg-zinc-800/20',
+          image:
+            'group-hover/blog-post:scale-105 rounded-lg shadow-lg border-4 border-muted border-0 border-r-1 border-(--line-b-color-dark) ring-default',
+        }"
+        orientation="horizontal"
+        variant="naked"
+      />
+      <LineSpacer v-if="posts && index !== posts.length - 1" :inner-border="false" />
+    </Motion>
+  </UMain>
 </template>
